@@ -1,4 +1,5 @@
  terraform {
+    required_version = "= v0.15.5"
     required_providers {
      ansible = {
       source = "nbering/ansible"
