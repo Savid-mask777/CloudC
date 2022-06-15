@@ -1,26 +1,32 @@
-terraform {
-  required_version = "= v1.2.2"
-  required_providers {
-    alicloud = {
-      source = "aliyun/aliccloud"
-      version = "1.99.0"
+ terraform {
+    required_providers {
+     ansible = {
+      source = "nbering/ansible"
+      version = "1.0.4"
+    }
+       alicloud = {
+        source = "aliyun/alicloud"
+        version = "1.99.0"
+      }
     }
   }
-  
-  resource "ansible_host" "salt-proxy" {
+ provider "alicloud" {
+}
+ provider "ansible" {
+}
+resource "ansible_host" "node1" {
   count = 1
 
   // 配置机器的 hostname，一般配置为计算资源的 public_ip (或 private_ip)
-  inventory_hostname  = alicloud_instance.ecsone[count.index].public_ip
+  inventory_hostname  = "116.62.157.43"
 
   // 配置机器所属分组
-  groups = ["salt-proxy"]
+  groups = ["node1"]
 
   // 传给 ansible 的 vars，可在 playbook 文件中引用
   vars = {
     wait_connection_timeout   = 60
-    proxy_private_ip          = alicloud_instance.ecsone[count.index].private_ip
+    proxy_private_ip          = "116.62.157.43"
     proxy_docker_tag          = var.proxy_docker_tag
   }
-}
 }
